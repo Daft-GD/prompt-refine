@@ -98,6 +98,14 @@ cp prompt-refine/SKILL.md ~/.claude/skills/prompt-refine/
 
 若编译时做了假设，编译稿后还会附 `Assumptions` 块（例如"假设无需区分匿名与登录用户的限额"），供你确认或推翻。
 
+### 一次真实运行
+
+不只代码任务——任何要交给 AI 的活儿都能编译。下面是一次真实运行：输入一句"生成一条小狗滑滑板的视频"，编译出的 prompt 自带运镜设计、摄影质感、BGM 方向、中英双版与验收标准，复制给任意视频生成模型即可开跑：
+
+<p align="center">
+  <img src="assets/demo-video-prompt.png" width="720" alt="prompt-refine 实战：一句话想法编译成专业级视频生成 prompt">
+</p>
+
 ## License
 
 [MIT](./LICENSE) © 2026 Li-Bailiang
