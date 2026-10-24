@@ -47,19 +47,79 @@
 - **忠实意图与语言** —— 重构、消歧、扎根项目，但绝不添加你没有要求的范围；中文任务产出中文 prompt。
 - **小任务不灌水** —— 结构随任务规模伸缩，不会给两行的小事套企业级方案模板。
 
-## 使用方法
+## 安装
 
-本仓库就是技能本体，核心只有一个 `SKILL.md`。它兼容任何按 **SKILL.md 约定**（YAML frontmatter `name` / `description`）发现技能的 AI 编码代理，Claude Code 及各类支持 Agent Skills 的同类工具皆可。
-
-安装：把 `SKILL.md` 放进你 agent 技能目录下的 `prompt-refine/` 子目录（用户级目录如 `~/.claude/skills/`，项目级如 `<repo>/.claude/skills/`，以你的 agent 文档为准）：
+技能本体就是仓库根目录的 `SKILL.md`，遵循 [Agent Skills](https://agentskills.io) 开放标准（YAML frontmatter `name` / `description`），Claude Code、Codex CLI、Gemini CLI、opencode 等主流编码代理通用。仓库根目录即技能目录，一条 clone 就装好：
 
 ```bash
-git clone https://github.com/Daft-GD/prompt-refine.git
-mkdir -p ~/.claude/skills/prompt-refine
-cp prompt-refine/SKILL.md ~/.claude/skills/prompt-refine/
+git clone https://github.com/Daft-GD/prompt-refine.git <你的技能目录>/prompt-refine
 ```
 
-使用：装好后直接在对话里触发——
+各 agent 的技能目录对照：
+
+| Agent | 用户级（全局） | 项目级（随仓库共享） |
+|---|---|---|
+| Claude Code | `~/.claude/skills/` | `.claude/skills/` |
+| Codex CLI | `~/.codex/skills/` | `.codex/skills/` |
+| Gemini CLI | `~/.gemini/skills/` | `.gemini/skills/` 或 `.agents/skills/` |
+| opencode | `~/.config/opencode/skills/` | `.opencode/skills/` |
+
+逐个来看：
+
+### Claude Code
+
+```bash
+# 全局安装
+git clone https://github.com/Daft-GD/prompt-refine.git ~/.claude/skills/prompt-refine
+# 或项目级：提交进版本库，全团队共享
+git clone https://github.com/Daft-GD/prompt-refine.git .claude/skills/prompt-refine
+```
+
+### Codex CLI
+
+```bash
+git clone https://github.com/Daft-GD/prompt-refine.git ~/.codex/skills/prompt-refine
+```
+
+安装后重启 Codex 加载新技能；会话里可用 `$prompt-refine` 显式调用，或自然语言触发。
+
+### Gemini CLI
+
+```bash
+# 手动放置（用户级）
+git clone https://github.com/Daft-GD/prompt-refine.git ~/.gemini/skills/prompt-refine
+# 或用内置安装命令
+gemini skills install https://github.com/Daft-GD/prompt-refine.git
+```
+
+装完输入 `/skills list` 确认已识别。
+
+### opencode
+
+```bash
+git clone https://github.com/Daft-GD/prompt-refine.git ~/.config/opencode/skills/prompt-refine
+```
+
+opencode 同时兼容读取 `~/.claude/skills/`、`~/.agents/skills/`（含项目级 `.claude/skills/`、`.agents/skills/`）——已在 Claude 目录装过就无需重复安装。
+
+### 其他 agent / 多 agent 共用
+
+任何遵循 Agent Skills 标准的工具，把仓库放进其技能目录下的 `prompt-refine/` 子目录即可（具体路径查你的工具文档）。多家工具都识别的跨 agent 目录是 `~/.agents/skills/`：
+
+```bash
+git clone https://github.com/Daft-GD/prompt-refine.git ~/.agents/skills/prompt-refine
+```
+
+如果只想带走技能本体一个文件：
+
+```bash
+mkdir -p ~/.claude/skills/prompt-refine
+curl -fsSL https://raw.githubusercontent.com/Daft-GD/prompt-refine/main/SKILL.md -o ~/.claude/skills/prompt-refine/SKILL.md
+```
+
+## 使用
+
+装好后直接在对话里触发——
 
 - 一次性："帮我把这个任务描述优化成可执行的 prompt：给这个 API 加个限流"
 - 持久模式：`/prompt-refine`，此后每条任务描述都会先编译再执行（说"执行"才执行）。
